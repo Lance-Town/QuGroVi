@@ -9,12 +9,13 @@ import SwiftUI
 
 @main
 struct QuGroViApp: App {
+    // Data controller for CoreData
+    @StateObject private var dataController = DataController()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
-//                .onAppear(
-//                    UserDefaults.standard.setValue(value: false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
-//                )
+                .environment(\.managedObjectContext, dataController.container.viewContext)
         }
     }
 }

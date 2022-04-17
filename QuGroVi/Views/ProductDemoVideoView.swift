@@ -1,25 +1,13 @@
 //
-//  ShoppingCartView.swift
+//  ProductDemoVideoView.swift
 //  QuGroVi
 //
-//  Created by Lance Townsend on 4/3/22.
+//  Created by Lance Townsend on 4/6/22.
 //
 
 import SwiftUI
 
-struct RectangleDivider: View {
-    let height: CGFloat
-    let backgroundColor: Color
-    
-    var body: some View {
-        Rectangle()
-            .frame(height: height)
-            .foregroundColor(backgroundColor)
-            .padding(.top)
-    }
-}
-
-struct ProductsInShoppingCartView: View {
+struct ProductsInDemoVideoShoppingCartView: View {
     @State var product: Product
     @State var deleteItem: (_ product: Product) -> Void
     @State private var isDeleted = false
@@ -51,14 +39,12 @@ struct ProductsInShoppingCartView: View {
     }
 }
 
-struct ShoppingCartView: View {
+struct ProductDemoVideoView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var moc
     
     @State private var isDoneShopping = false
     @State var products: FetchedResults<Product>
-    
-    @State private var barcodeViewChoice: Bool = false
     
     var body: some View {
         ScrollView {
@@ -79,40 +65,26 @@ struct ShoppingCartView: View {
                 RectangleDivider(height: 2, backgroundColor: Color(white: 0.9))
                 
                 ForEach(products, id: \.barCode) { product in
-                    ProductsInShoppingCartView(product: product, deleteItem: deleteItem)
+                    ProductsInDemoVideoShoppingCartView(product: product, deleteItem: deleteItem)
                     
-                    RectangleDivider(height: 2, backgroundColor: Color(white: 0.9411))
+                    RectangleDivider(height: 2, backgroundColor: Color(white: 0.9))
                 }
             }
             .padding()
             
-            HStack {
-                Button("Finish Shopping(QR Code)") {
-                    isDoneShopping = true
-                }
-                    .padding()
-                    .font(.caption)
-                    .background(.blue)
-                    .foregroundColor(.white)
-                    .clipShape(Capsule())
-                
-                Button("Finish Shopping(Barcode)") {
-                    isDoneShopping = true
-                    barcodeViewChoice = true
-                }
-                    .padding()
-                    .font(.caption)
-                    .background(.blue)
-                    .foregroundColor(.white)
-                    .clipShape(Capsule())
-            }
+            
+            
+            Button("Finish Shopping") { isDoneShopping = true }
+                .padding()
+                .background(.blue)
+                .foregroundColor(.white)
+                .clipShape(Capsule())
         }
         .sheet(isPresented: $isDoneShopping) {
-            if barcodeViewChoice {
-                BarcodeView(products: products)
-            } else {
-                QRCodeView(products: products)
-            }
+            QRCodeView(products: products)
+        }
+        .onAppear {
+            loadDemo()
         }
     }
     
@@ -122,5 +94,31 @@ struct ShoppingCartView: View {
         if moc.hasChanges {
             try? moc.save()
         }
+    }
+    
+    func loadDemo() {
+        let juniorMint = Product(context: moc)
+        juniorMint.barCode = "Peppermint Gum"
+        juniorMint.itemCount = 1
+        
+        let oliveOil = Product(context: moc)
+        oliveOil.barCode = "Olive Oil"
+        oliveOil.itemCount = 1
+        
+        let crackers = Product(context: moc)
+        crackers.barCode = "Graham Crackers"
+        crackers.itemCount = 2
+        
+        let oatMeal = Product(context: moc)
+        oatMeal.barCode = "Oatmeal"
+        oatMeal.itemCount = 1
+        
+        let popcorn = Product(context: moc)
+        popcorn.barCode = "Popcorn"
+        popcorn.itemCount = 1
+        
+        let vanilla = Product(context: moc)
+        vanilla.barCode = "Vanilla Extract"
+        vanilla.itemCount = 1
     }
 }

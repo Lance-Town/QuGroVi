@@ -8,23 +8,47 @@
 import CodeScanner
 import SwiftUI
 
+struct ShoppingCartButtonView: View {
+    @Binding var isPressed: Bool
+    var circleColor: Color = .blue
+    var cartColor: Color = .white
+    var width: CGFloat = 66
+    var height: CGFloat = 66
+    var alignment: Alignment = .bottomTrailing
+    var systemImage: String = "cart"
+    
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(circleColor)
+                .frame(width: width, height: height, alignment: alignment)
+            
+            Button {
+                isPressed = true
+            } label: {
+                Image(systemName: systemImage)
+            }
+            .font(.largeTitle)
+            .foregroundColor(cartColor)
+        }
+        .padding()
+        .padding(.trailing, 5)
+    }
+}
+
 struct ContentView: View {
+    // Get a MOC to store view context
+    @Environment(\.managedObjectContext) var moc
+    @FetchRequest(sortDescriptors: []) var products: FetchedResults<Product>
+    
     @State private var isPressed = false
-    @State private var items = [Item]()
     
     @State private var showScanSuccess = false
     @State private var details = ""
     
     var body: some View {
         ZStack {
-//            Rectangle()
-//                .fill(.red)
-//                .ignoresSafeArea()
-            
-//            CodeScannerView(codeTypes: [.qr], simulatedData: "Bottle Water/n 2.99", completion: handleScan)
-//                .ignoresSafeArea()
-            
-            CodeScannerView(codeTypes: [.upce, .ean8, .gs1DataBar, .codabar, .code128, .code39, .code39Mod43, .ean13, .code93, .itf14], scanMode: .continuous, scanInterval: 10.0, showViewfinder: true, simulatedData: "006453657891", shouldVibrateOnSuccess: true, isTorchOn: false, completion: handleScan)
+            CodeScannerView(codeTypes: [.ean13], scanMode: .continuous, scanInterval: 6.5, showViewfinder: true, simulatedData: "036000291452", shouldVibrateOnSuccess: true, isTorchOn: false, completion: handleScan)
                 .ignoresSafeArea()
             
             VStack {
@@ -33,56 +57,64 @@ struct ContentView: View {
                 HStack {
                     Spacer()
                     
-                    ZStack {
-                        Circle()
-//                            .fill(Color(red: 51/255, green: 153/255, blue: 1))
-                            .fill(.blue)
-                            .frame(width: 66, height: 66, alignment: .bottomTrailing)
-                        
-                        Button {
-                            isPressed = true
-                        } label: {
-                            Image(systemName: "cart")
-                        }
-                        .font(.largeTitle)
-                        .foregroundColor(.white)
-                    }
-                    .padding()
-                    .padding(.trailing, 5)
+                    ShoppingCartButtonView(isPressed: $isPressed)
                 }
             }
         }
         .sheet(isPresented: $isPressed) {
-            ShoppingCartView(items: items)
+            ShoppingCartView(products: products)
+            
+            // DEMO ONLY
+//            ProductDemoVideoView(products: products)
         }
         .alert("Success", isPresented: $showScanSuccess) {
-            Button("Ok") { }
+            Button("Ok") { showScanSuccess = false }
         } message: {
             Text("\(details)")
+            
+            // DEMO ONLY
+//            Text("Raw Kombucha Added!")
         }
     }
     
     func handleScan(result: Result<ScanResult, ScanError>) {
         showScanSuccess = true
+        
         switch result {
         case .success(let result):
             details = result.string
             guard details.count > 0 else { return }
             
-            if !items.isEmpty {
-                for i in 0...(items.count - 1){
-                    if items[i].barCode == details {
-                        items[i].itemCount += 1
+            // If EAN-13, turn it to a UPC-A
+            if details.count == 13 {
+                details.removeFirst()
+            }
+            
+            // check for duplicates
+            if !products.isEmpty {
+                for i in 0...(products.count - 1){
+                    if products[i].barCode == details {
+                        products[i].itemCount += 1
                         return
                     }
                 }
             }
             
-            let newItem = Item(barCode: details)
-            items.append(newItem)
+//          Initialize product
+            let product = Product(context: moc)
+            product.barCode = details
+            product.itemCount = 1
             
+////            DEMO ONLY
+//            let product = Product(context: moc)
+//            product.barCode = "Raw Kombucha"
+//            product.itemCount = 1
         case .failure(let error):
             print("Error: \(error.localizedDescription)")
+        }
+        
+        if moc.hasChanges {
+            try? moc.save()
         }
     }
 }

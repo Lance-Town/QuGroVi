@@ -6,7 +6,7 @@
 //
 
 import CoreData
-import Foundation
+import UIKit
 
 class DataController: ObservableObject {
     let container = NSPersistentContainer(name: "QuGroVi")
