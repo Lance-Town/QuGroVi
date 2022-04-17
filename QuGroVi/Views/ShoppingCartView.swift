@@ -89,6 +89,7 @@ struct ShoppingCartView: View {
             HStack {
                 Button("Finish Shopping(QR Code)") {
                     isDoneShopping = true
+                    barcodeViewChoice = false
                 }
                     .padding()
                     .font(.caption)

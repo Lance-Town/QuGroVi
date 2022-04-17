@@ -19,7 +19,6 @@
 		7E8A850E27FB590C00C7B0A1 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8A850D27FB590C00C7B0A1 /* QRCodeView.swift */; };
 		7E8A851527FB7BFA00C7B0A1 /* QuGroVi.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7E8A851327FB7BFA00C7B0A1 /* QuGroVi.xcdatamodeld */; };
 		7E9E8DE32801DDFD00A9479C /* BarcodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9E8DE22801DDFD00A9479C /* BarcodeView.swift */; };
-		7EA09B4927FE254700F193DE /* ProductDemoVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA09B4827FE254700F193DE /* ProductDemoVideoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,7 +35,6 @@
 		7E8A850D27FB590C00C7B0A1 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
 		7E8A851427FB7BFA00C7B0A1 /* QuGroVi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = QuGroVi.xcdatamodel; sourceTree = "<group>"; };
 		7E9E8DE22801DDFD00A9479C /* BarcodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeView.swift; sourceTree = "<group>"; };
-		7EA09B4827FE254700F193DE /* ProductDemoVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDemoVideoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +56,6 @@
 				7E9E8DE22801DDFD00A9479C /* BarcodeView.swift */,
 				7E81FF6427ED4EFD0058EAEA /* ContentView.swift */,
 				7E1BA28627FA17AF00E9A249 /* ShoppingCartView.swift */,
-				7EA09B4827FE254700F193DE /* ProductDemoVideoView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -215,7 +212,6 @@
 				7E8A851527FB7BFA00C7B0A1 /* QuGroVi.xcdatamodeld in Sources */,
 				7E81FF6527ED4EFD0058EAEA /* ContentView.swift in Sources */,
 				7E1BA28E27FA24CC00E9A249 /* DataController.swift in Sources */,
-				7EA09B4927FE254700F193DE /* ProductDemoVideoView.swift in Sources */,
 				7E8A850E27FB590C00C7B0A1 /* QRCodeView.swift in Sources */,
 				7E1BA28727FA17AF00E9A249 /* ShoppingCartView.swift in Sources */,
 				7E315F952806533100C402AC /* StringIndexing.swift in Sources */,
